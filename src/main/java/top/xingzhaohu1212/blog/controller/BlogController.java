@@ -4,6 +4,7 @@ package top.xingzhaohu1212.blog.controller;
 import org.omg.PortableInterceptor.INACTIVE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import top.xingzhaohu1212.blog.dao.BlogMapper;
@@ -70,7 +71,7 @@ public class BlogController {
         return responseResult;
     }
 
-    @RequestMapping("/insertBlog")
+    @RequestMapping(value = "/insertBlog", method = RequestMethod.POST)
     public ResponseResult insertBlog(PostParams postParams) {
         //后台提交博客!
         ResponseResult<Blog> responseResult = new ResponseResult<>();
@@ -132,13 +133,13 @@ public class BlogController {
                     double ratio = width / 100;
                     ImageHandle.modifyImageSize(rootUrlWin + fileName, suffix, ratio );
                 }
-                if (width > height) {
+                else if (width > height) {
                     //证明是横着的图片
                     //按照宽为100来缩放
                     double ratio = width / 100;
                     ImageHandle.modifyImageSize(rootUrlWin + fileName, suffix, ratio );
                 }
-                if (width < height) {
+                else if (width < height) {
                     //按照高100来缩放  高一定不能超过100！！ 要不布局就乱了
                     double ratio = height / 100;
                     ImageHandle.modifyImageSize(rootUrlWin + fileName, suffix, ratio );
@@ -153,13 +154,13 @@ public class BlogController {
                     double ratio = width / 200;
                     ImageHandle.modifyImageSize(rootUrlWin + fileName, suffix, ratio );
                 }
-                if (width > height) {
+                else if (width > height) {
                     //证明是横着的图片
                     //按照宽为100来缩放
                     double ratio = width / 350;
                     ImageHandle.modifyImageSize(rootUrlWin + fileName, suffix, ratio );
                 }
-                if (width < height) {
+                else if (width < height) {
 
                     double ratio = height / 200;
                     ImageHandle.modifyImageSize(rootUrlWin + fileName, suffix, ratio );
