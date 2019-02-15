@@ -1,0 +1,17 @@
+spring:
+  http:
+    encoding:
+      force: true
+      charset: UTF-8
+      enabled: true
+  datasource:
+    url: jdbc:mysql://115.28.79.206/book_xzh?useUnicode=true&characterEncoding=UTF8&useSSL=false
+    username: root
+    password: f408909685
+    driver-class-name: com.mysql.jdbc.Driver
+    hikari:
+      max-lifetime: 1800000
+      minimum-idle: 5
+server:
+  port: 80
+
