@@ -13,5 +13,5 @@ spring:
       max-lifetime: 1800000
       minimum-idle: 5
 server:
-  port: 80
+  port: 5002
 
