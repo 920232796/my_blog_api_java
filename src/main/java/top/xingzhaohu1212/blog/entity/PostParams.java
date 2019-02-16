@@ -11,6 +11,8 @@ public class PostParams {
 
     private String keyword;
 
+    private Integer id;
+
     private String article_class;
 
     private Integer limit;

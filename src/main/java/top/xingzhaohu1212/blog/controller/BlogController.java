@@ -61,6 +61,7 @@ public class BlogController {
             number = blogMapper.getBlogByKeywordQuantity(keyword);
         }
         if (keyword == null) {
+            article_class = "%" + article_class + "%";
             blogs = blogMapper.searchBlogByClass(article_class, start, limit);
             number = blogMapper.getBlogByClassQuantity(article_class);
         }
@@ -87,6 +88,29 @@ public class BlogController {
         } catch (Exception e) {
             responseResult.setRet("fail");
             responseResult.setMsg("插入博客失败。");
+            e.printStackTrace();
+        }
+        return responseResult;
+    }
+
+    @RequestMapping(value = "/editBlog", method = RequestMethod.POST)
+    public ResponseResult editBlog(PostParams postParams) {
+        //后台提交博客!
+        ResponseResult<Blog> responseResult = new ResponseResult<>();
+
+        Blog blog = new Blog();
+//        blog.setArticle_class(postParams.getArticle_class());
+//        blog.setTitle(postParams.getTitle());
+        blog.setId(postParams.getId());
+        blog.setContent(postParams.getContent());
+//        blog.setTime(postParams.getTime());
+//        blog.setImage(postParams.getImage());
+        try {
+            blogMapper.updateBlog(blog);
+
+        } catch (Exception e) {
+            responseResult.setRet("fail");
+            responseResult.setMsg("更新博客失败。");
             e.printStackTrace();
         }
         return responseResult;
@@ -145,27 +169,27 @@ public class BlogController {
                     ImageHandle.modifyImageSize(rootUrlWin + fileName, suffix, ratio );
                 }
             }
-            else {
-                // 证明是上传的博客文章图片！！ 而不是封面图片 这个又要按照另一个规则来进行缩放了
-                HashMap<String, Integer> resultMap = ImageHandle.getWidthHeight(rootUrlWin + fileName);
-                Integer width = resultMap.get("width");
-                Integer height = resultMap.get("height");
-                if (width.equals(height)) {
-                    double ratio = width / 200;
-                    ImageHandle.modifyImageSize(rootUrlWin + fileName, suffix, ratio );
-                }
-                else if (width > height) {
-                    //证明是横着的图片
-                    //按照宽为100来缩放
-                    double ratio = width / 350;
-                    ImageHandle.modifyImageSize(rootUrlWin + fileName, suffix, ratio );
-                }
-                else if (width < height) {
-
-                    double ratio = height / 200;
-                    ImageHandle.modifyImageSize(rootUrlWin + fileName, suffix, ratio );
-                }
-            }
+//            else {
+//                // 证明是上传的博客文章图片！！ 而不是封面图片 这个又要按照另一个规则来进行缩放了
+//                HashMap<String, Integer> resultMap = ImageHandle.getWidthHeight(rootUrlWin + fileName);
+//                Integer width = resultMap.get("width");
+//                Integer height = resultMap.get("height");
+//                if (width.equals(height)) {
+//                    double ratio = width / 200;
+//                    ImageHandle.modifyImageSize(rootUrlWin + fileName, suffix, ratio );
+//                }
+//                else if (width > height) {
+//                    //证明是横着的图片
+//                    //按照宽为100来缩放
+//                    double ratio = width / 350;
+//                    ImageHandle.modifyImageSize(rootUrlWin + fileName, suffix, ratio );
+//                }
+//                else if (width < height) {
+//
+//                    double ratio = height / 200;
+//                    ImageHandle.modifyImageSize(rootUrlWin + fileName, suffix, ratio );
+//                }
+//            }
 
             responseResult.setRet("succ");
             responseResult.setUrl("http://47.100.10.8/image/" + fileName);
