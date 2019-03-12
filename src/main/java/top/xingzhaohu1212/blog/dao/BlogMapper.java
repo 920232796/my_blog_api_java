@@ -8,8 +8,8 @@ import java.util.List;
 @Mapper
 public interface BlogMapper {
 
-    @Select("select * from blog")
-    public List<Blog> getBlogByTitle();
+    @Select("select * from blog where id = #{id}")
+    public Blog getBlogById(Integer id);
 
 
     @Select("select * from blog where article_class like  #{article_class} limit #{start}, #{limit}")

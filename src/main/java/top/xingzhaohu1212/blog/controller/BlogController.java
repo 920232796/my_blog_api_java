@@ -27,16 +27,31 @@ public class BlogController {
     @Autowired
     private BlogMapper blogMapper;
 
-    @RequestMapping("/test")
-    public String test() {
+//    @RequestMapping("/test")
+//    public String test() {
+//
+//        String title = "xzh";
+//        List<Blog> result = blogMapper.getBlogByTitle();
+//        for (Blog each:result) {
+//            System.out.println(each.getContent());
+//        }
+//        RandomGenerateStr.getRandomStr(20);
+//        return "hello world";
+//    }
 
-        String title = "xzh";
-        List<Blog> result = blogMapper.getBlogByTitle();
-        for (Blog each:result) {
-            System.out.println(each.getContent());
+    @RequestMapping("/getBlog")
+    public ResponseResult<Blog> getBlog(PostParams postParams) {
+
+        ResponseResult<Blog> responseResult = new ResponseResult<Blog>();
+        Integer id = postParams.getId();
+        Blog blog = blogMapper.getBlogById(id);
+        if (blog != null) {
+            responseResult.setObj(blog);
         }
-        RandomGenerateStr.getRandomStr(20);
-        return "hello world";
+        else {
+            responseResult.setRet("fail");
+        }
+        return responseResult;
     }
 
     @RequestMapping("/searchBlog")
@@ -141,32 +156,36 @@ public class BlogController {
             return responseResult;
         }
         //随机生成字符串 成为file name
-        fileName = RandomGenerateStr.getRandomStr(20) + "." + suffix;
-        File dest = new File(rootUrlWin + fileName);
+        fileName = RandomGenerateStr.getRandomStr_1() + "." + suffix;
+        File dest = new File(rootUrlLinux + fileName);
         System.out.println("filename: " + fileName);
         try {
             file.transferTo(dest);
 
             if (ifMainImage == null) {
                 //证明是封面图！！按照 150 * 80 来放缩 因为封面图是element ui 组件上传 不会传递ifMainImage这个参数 所以肯定为null
-                HashMap<String, Integer> resultMap = ImageHandle.getWidthHeight(rootUrlWin + fileName);
+                HashMap<String, Integer> resultMap = ImageHandle.getWidthHeight(rootUrlLinux + fileName);
                 Integer width = resultMap.get("width");
                 Integer height = resultMap.get("height");
                 if (width.equals(height)) {
                     //证明是正方形
                     double ratio = width / 100;
-                    ImageHandle.modifyImageSize(rootUrlWin + fileName, suffix, ratio );
+                    ImageHandle.modifyImageSize(rootUrlLinux + fileName, suffix, ratio );
                 }
                 else if (width > height) {
                     //证明是横着的图片
                     //按照宽为100来缩放
                     double ratio = width / 100;
-                    ImageHandle.modifyImageSize(rootUrlWin + fileName, suffix, ratio );
+                    ImageHandle.modifyImageSize(rootUrlLinux + fileName, suffix, ratio );
                 }
                 else if (width < height) {
                     //按照高100来缩放  高一定不能超过100！！ 要不布局就乱了
                     double ratio = height / 100;
-                    ImageHandle.modifyImageSize(rootUrlWin + fileName, suffix, ratio );
+
+//                    ImageHandle.modifyImageSize(rootUrlWin + fileName, suffix, ratio );
+
+                    ImageHandle.modifyImageSize(rootUrlLinux + fileName, suffix, ratio );
+
                 }
             }
 //            else {
