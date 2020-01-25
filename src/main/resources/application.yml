@@ -5,9 +5,9 @@ spring:
       charset: UTF-8
       enabled: true
   datasource:
-    url: jdbc:mysql://11
+    url: jdbc:mysql://115.28.79.206:3306/book_xzh?useUnicode=true&characterEncoding=UTF8&useSSL=false
     username: root
-    password: 11
+    password: f408909685
     driver-class-name: com.mysql.jdbc.Driver
     hikari:
       max-lifetime: 1800000

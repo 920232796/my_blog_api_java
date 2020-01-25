@@ -46,6 +46,13 @@ public class BlogController {
         Integer id = postParams.getId();
         Blog blog = blogMapper.getBlogById(id);
         if (blog != null) {
+            Integer readQuantity = blog.getRead_quantity();
+            if (readQuantity == null) {
+                readQuantity = 0;
+            }
+            readQuantity += 1;
+            blog.setRead_quantity(readQuantity);
+            blogMapper.updateBlogReadQuantity(blog);
             responseResult.setObj(blog);
         }
         else {
@@ -137,7 +144,6 @@ public class BlogController {
         //如果这个不是false 那么就是上传的文章封面图片 这个需要根据文章封面图的大小比例来进行对图片的放缩！！
         String ifMainImage = postParams.getIfMainImage();
 
-
         String rootUrlLinux = "/usr/image/";
         String rootUrlWin = "d://java/";
         ResponseResult<String> responseResult = new ResponseResult<>();
@@ -161,63 +167,12 @@ public class BlogController {
         System.out.println("filename: " + fileName);
         try {
             file.transferTo(dest);
-
-            if (ifMainImage == null) {
-                //证明是封面图！！按照 150 * 80 来放缩 因为封面图是element ui 组件上传 不会传递ifMainImage这个参数 所以肯定为null
-                HashMap<String, Integer> resultMap = ImageHandle.getWidthHeight(rootUrlLinux + fileName);
-                Integer width = resultMap.get("width");
-                Integer height = resultMap.get("height");
-                if (width.equals(height)) {
-                    //证明是正方形
-                    double ratio = width / 100;
-                    ImageHandle.modifyImageSize(rootUrlLinux + fileName, suffix, ratio );
-                }
-                else if (width > height) {
-                    //证明是横着的图片
-                    //按照宽为100来缩放
-                    double ratio = width / 100;
-                    ImageHandle.modifyImageSize(rootUrlLinux + fileName, suffix, ratio );
-                }
-                else if (width < height) {
-                    //按照高100来缩放  高一定不能超过100！！ 要不布局就乱了
-                    double ratio = height / 100;
-
-//                    ImageHandle.modifyImageSize(rootUrlWin + fileName, suffix, ratio );
-
-                    ImageHandle.modifyImageSize(rootUrlLinux + fileName, suffix, ratio );
-
-                }
-            }
-//            else {
-//                // 证明是上传的博客文章图片！！ 而不是封面图片 这个又要按照另一个规则来进行缩放了
-//                HashMap<String, Integer> resultMap = ImageHandle.getWidthHeight(rootUrlWin + fileName);
-//                Integer width = resultMap.get("width");
-//                Integer height = resultMap.get("height");
-//                if (width.equals(height)) {
-//                    double ratio = width / 200;
-//                    ImageHandle.modifyImageSize(rootUrlWin + fileName, suffix, ratio );
-//                }
-//                else if (width > height) {
-//                    //证明是横着的图片
-//                    //按照宽为100来缩放
-//                    double ratio = width / 350;
-//                    ImageHandle.modifyImageSize(rootUrlWin + fileName, suffix, ratio );
-//                }
-//                else if (width < height) {
-//
-//                    double ratio = height / 200;
-//                    ImageHandle.modifyImageSize(rootUrlWin + fileName, suffix, ratio );
-//                }
-//            }
-
             responseResult.setRet("succ");
-            responseResult.setUrl("http://47.100.10.8/image/" + fileName);
+            responseResult.setUrl("http://zhxing.online/image/" + fileName);
             System.out.println(responseResult);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        System.out.println("hello world");
         return responseResult;
     }
 
