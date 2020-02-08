@@ -16,7 +16,6 @@ public interface BlogMapper {
     @Select("select count(*) from blog where article_class like  #{article_class}")
     public Integer getBlogByClassQuantity(String article_class);
 
-
     @Insert("insert into blog (title, content, image, time, article_class) values (#{title}, #{content}, #{image}, #{time}, #{article_class})")
     public void insertBlog(Blog blog);
 
@@ -34,4 +33,7 @@ public interface BlogMapper {
 
     @Update("update blog set read_quantity = #{read_quantity} where id = #{id}")
     void updateBlogReadQuantity(Blog blog);
+
+    @Select("select * from blog order by read_quantity desc limit #{start}, #{limit}")
+    List<Blog> searchHotBlog(@Param("start") Integer start, @Param("limit") Integer limit);
 }

@@ -168,7 +168,7 @@ public class BlogController {
         try {
             file.transferTo(dest);
             responseResult.setRet("succ");
-            responseResult.setUrl("http://zhxing.online/image/" + fileName);
+            responseResult.setUrl("http://www.zhxing.online/image/" + fileName);
             System.out.println(responseResult);
         } catch (Exception e) {
             e.printStackTrace();
@@ -177,6 +177,20 @@ public class BlogController {
     }
 
 
+    @RequestMapping("/searchHotBlog")
+    public ResponseResult searchHotBlog(PostParams postParams) {
+        // t通过文章类别  limit start  来进行分页显示文章。
+        ResponseResult<Blog> responseResult = new ResponseResult<Blog>();
+        int start = postParams.getStart();
+        Integer limit = postParams.getLimit();
+        List<Blog> blogs = new ArrayList<>();
+        if (limit == null) {
+            limit = 5;
+        }
+        blogs = blogMapper.searchHotBlog(start, limit);
+        responseResult.setArrays(blogs);
 
+        return responseResult;
+    }
 
 }
